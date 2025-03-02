@@ -1,42 +1,53 @@
-import { useState } from "react";
-import "./App.css";
+import React, { createContext, useContext, useState } from "react";
 
-const bulbContext = React.createContext();
+// Create Context
+const CountContext = createContext();
 
-function App() {
+// Context Provider Component
+function CountContextProvider({ children }) {
+  const [count, setCount] = useState(0);
+
   return (
-    <div>
-      <LightBulb />
-    </div>
+    <CountContext.Provider value={{ count, setCount }}>
+      {children}
+    </CountContext.Provider>
   );
 }
 
-function LightBulb() {
-  const [bulbOn, setBulbOn] = useState(true);
+// Individual Components
+function Decrease() {
+  const { count, setCount } = useContext(CountContext);
+  return <button onClick={() => setCount(count - 1)}>Decrease</button>;
+}
 
+function Incrase() {
+  const { count, setCount } = useContext(CountContext);
+  return <button onClick={() => setCount(count + 1)}>Increase</button>;
+}
+
+function Value() {
+  const { count } = useContext(CountContext);
+  return <p>Count: {count}</p>;
+}
+
+// Parent Component
+function Parent() {
   return (
-    <div>
-      <BulbState bulbOn={bulbOn} />
-      <ToggleBulbState bulbOn={bulbOn} setBulbOn={setBulbOn} />
-    </div>
+    <>
+      <Incrase />
+      <Decrease />
+      <Value />
+    </>
   );
 }
 
-function BulbState({ bulbOn }) {
-  return <div>{bulbOn ? "Bulb on" : "Bulb off"}</div>;
-}
-
-function ToggleBulbState({ bulbOn, setBulbOn }) {
-  function toggle() {
-    // setBulbOn(currentState => !currentState)
-    setBulbOn(!bulbOn);
-  }
-
+// App Component
+const App = () => {
   return (
-    <div>
-      <button onClick={toggle}>Toggle the bulb</button>
-    </div>
+    <CountContextProvider>
+      <Parent />
+    </CountContextProvider>
   );
-}
+};
 
 export default App;
