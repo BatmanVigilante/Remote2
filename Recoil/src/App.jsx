@@ -1,32 +1,47 @@
-import { useState } from "react";
-import "./App.css";
+import React, { createContext, useContext, useState } from "react";
+import { RecoilRoot, atom, useRecoilValue, useSetRecoilState } from "recoil";
 
-function App() {
+const count = atom({
+  key: "countState", // unique ID (with respect to other atoms/selectors)
+  default: 0, // default value (aka initial value)
+});
+
+function Parent() {
   return (
-    <>
-      <Counter />
-    </>
+    <RecoilRoot>
+      <Incrase />
+      <Decrease />
+      <Value />
+    </RecoilRoot>
   );
 }
 
-function Counter() {
-  const [count, setCount] = useState(0);
+function Decrease() {
+  const setCount = useSetRecoilState(count);
+  return (
+    <button onClick={() => setCount((count) => count - 1)}>Decrease</button>
+  );
+}
 
+function Incrase() {
+  const setCount = useSetRecoilState(count);
+  return (
+    <button onClick={() => setCount((count) => count + 1)}>Increase</button>
+  );
+}
+
+function Value() {
+  const countValue = useRecoilValue(count);
+  return <p>Count: {countValue}</p>;
+}
+
+// App Component
+const App = () => {
   return (
     <div>
-      {count}
-      <Increase setCount={setCount} />
-      <Decrease setCount={setCount} />
+      <Parent />
     </div>
   );
-}
-
-function Increase({ setCount }) {
-  return <button onClick={() => setCount((c) => c + 1)}>+</button>;
-}
-
-function Decrease({ setCount }) {
-  return <button onClick={() => setCount((c) => c - 1)}>-</button>;
-}
+};
 
 export default App;
