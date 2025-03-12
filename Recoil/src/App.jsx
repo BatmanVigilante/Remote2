@@ -1,40 +1,39 @@
 import React, { createContext, useContext, useState } from "react";
 import { RecoilRoot, atom, useRecoilValue, useSetRecoilState } from "recoil";
+import { counterAtom, evenSelector } from "./store/atoms/counter";
 
-const count = atom({
-  key: "countState", // unique ID (with respect to other atoms/selectors)
-  default: 0, // default value (aka initial value)
-});
+
+
 
 function Parent() {
   return (
     <RecoilRoot>
-      <Incrase />
-      <Decrease />
-      <Value />
+    <Buttons></Buttons>
+    <Counter></Counter>
+    <IsEven></IsEven>
     </RecoilRoot>
   );
 }
 
-function Decrease() {
-  const setCount = useSetRecoilState(count);
+function Buttons() {
+  const setCount = useSetRecoilState(counterAtom);
   return (
-    <button onClick={() => setCount((count) => count - 1)}>Decrease</button>
+    <>
+    <button onClick={() => setCount((prev) => prev + 1)}>Increment</button>
+    <button onClick={() => setCount((prev) => prev - 1)}>Decrement</button>
+    </>
   );
 }
 
-function Incrase() {
-  const setCount = useSetRecoilState(count);
-  return (
-    <button onClick={() => setCount((count) => count + 1)}>Increase</button>
-  );
+function Counter() {
+  const count = useRecoilValue(counterAtom);
+  return <div>Count: {count}</div>;
 }
 
-function Value() {
-  const countValue = useRecoilValue(count);
-  return <p>Count: {countValue}</p>;
+function IsEven() {
+  const even = useRecoilValue(evenSelector);
+  return <div>{even ? "Even" : "Odd"}</div>;
 }
-
 // App Component
 const App = () => {
   return (
