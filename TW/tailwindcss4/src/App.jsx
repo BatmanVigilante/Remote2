@@ -8,10 +8,10 @@ function App() {
 
   return (
     <>
-      <div className="flex justify-between">
-        <div className="red">Div1</div>
-        <div className="bg-red">Div1</div>
-        <div className="bg-red">Div1</div>
+      <div className="flex justify-evenly">
+        <div className="bg-sky-950 ">Div1</div>
+        <div className="bg-red-500">Div2</div>
+        <div className="bg-blue-600">Div3</div>
       </div>
     </>
   );
